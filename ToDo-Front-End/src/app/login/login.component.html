@@ -1,0 +1,62 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+                <h2 class="heading-section">My Day Planner </h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="wrap d-md-flex">
+                    <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+                        <div class="text w-100">
+                            <h2>Welcome to <br>My Day Planner</h2>
+                            <p>Don't have an account?</p>
+                            <a routerLink="/register" class="btn btn-white btn-outline-white">Create My To Do Account
+                            </a>
+                        </div>
+                    </div>
+                    <div class="login-wrap p-4 p-lg-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4">Sign In</h3>
+                            </div>
+                            <div class="w-100">
+                                <p class="social-media d-flex justify-content-end">
+                                    <a href="#"
+                                        class="social-icon d-flex align-items-center justify-content-center"><span
+                                            class="fa fa-facebook"></span></a>
+                                    <a href="#"
+                                        class="social-icon d-flex align-items-center justify-content-center"><span
+                                            class="fa fa-twitter"></span></a>
+                                </p>
+                            </div>
+                        </div>
+                        <form (ngSubmit)=" login()" [formGroup]="loginForm" class="signin-form">
+                            <div class="form-group mb-3">
+                                <label class="label" for="name">User Name</label>
+                                <input formControlName="username" name="username" id="username" type="text"
+                                    class="form-control" placeholder="Username" required>
+                                <p class="mb-2" style="color: crimson;"
+                                    *ngIf="this.loginForm.get('username')?.errors && this.loginForm.get('username')?. touched">
+                                    &nbsp;Wrong username </p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="label" for="password">Password</label>
+                                <input formControlName="password" name="password" id="password" type="password"
+                                    class="form-control" placeholder="Password" required>
+                                <p class="mb-2" style="color: crimson;"
+                                    *ngIf="this.loginForm.get('password')?.errors && this.loginForm.get('password')?. touched">
+                                    &nbsp;Wrong password </p>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control btn btn-primary submit px-3">Sign In</button>
+                            </div>
+                            <p *ngIf="errMsg" style="color: crimson; text-align: center;"> {{errMsg}}</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

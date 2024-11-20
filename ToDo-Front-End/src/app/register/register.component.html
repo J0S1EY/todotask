@@ -1,0 +1,53 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="wrap d-md-flex">
+                    <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+                        <div class="text w-100">
+                            <h2>Welcome to <br> My Day Planner</h2>
+                            <p>My Day Planner makes it easy to stay organized and manage your life</p>
+                        </div>
+                    </div>
+                    <div class="login-wrap p-4 p-lg-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4">Register Now</h3>
+                            </div>
+                        </div>
+                        <div class="signin-form">
+                            <form [formGroup]="registerForm" (ngSubmit)="signUp()">
+                                <div class="form-group mb-3">
+                                    <label class="label" for="name">Enter A User Name</label>
+                                    <input formControlName="username" name="username" id="username" type="text" required
+                                        class="form-control" placeholder="Username">
+                                    <p
+                                        *ngIf="this.registerForm.get('username')?.errors && this.registerForm.get('username')?. touched">
+                                        Invalid
+                                        Username</p>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="label" for="password">Enter A Password</label>
+                                    <input formControlName="password" name="password" id="password" type="password"
+                                        class="form-control" placeholder="Password" required>
+                                    <p
+                                        *ngIf="this.registerForm.get('password')?.errors && this.registerForm.get('password')?. touched">
+                                        Password Not
+                                        Valid</p>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" 
+                                        class="form-control btn btn-primary submit px-3">Register</button>
+                                </div>
+                                <div class="form-group d-md-flex">
+                                    <p> Already have an account ? </p>
+                                    <a routerLink="/"> Log In</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

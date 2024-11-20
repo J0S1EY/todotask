@@ -1,0 +1,134 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" routerLink="/todo-dashboard">&nbsp; &nbsp; Hi, {{user}} &nbsp; </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            </ul>
+            <div class="statusBar">
+                <button (click)="sortTask('')" type="button" class="btn btn-light btn-sm">
+                    All Tasks <span class="badge badge-dark" style="color: black;">{{ TotalTask | async }}</span>
+                </button>
+                <button (click)="sortTask('pending')" type="button" class="btn btn-info btn-sm">
+                    Pending <span class="badge badge-light">{{pendingTask | async }}</span>
+                </button>
+                <button (click)="sortTask('completed')" type="submit" class="btn btn-success btn-sm">
+                    Completed <span class="badge badge-light"> {{completedTask | async }} </span>
+                </button>
+                <button (click)="sortTask('canceled')" type="button" class="btn btn-danger btn-sm">
+                    Canceled <span class="badge badge-light">{{canceledTask | async }}</span>
+                </button>
+                <button (click)="sortTask('report')" type="button" class="btn btn-warning btn-sm">
+                    Task Report
+                </button>
+                <button (click)="logout()" type="button" class="btn btn-secondary btn-sm">
+                    Log Out <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <form [formGroup]="taskForm" (ngSubmit)="clear()">
+        <div class="containerLeft">
+            <div class="task-title">
+                <input formControlName="title" name="title" id="title" type="text" required class="input"
+                    placeholder="Enter Task Title" />
+                <input type="submit" class="add" value="Clear All" />
+            </div>
+            <div class="tasks">
+                <input formControlName="task" name="task" id="task" type="text" required class="inputTask"
+                    placeholder="Enter Your Task  " />
+            </div>
+            <div (click)="added() " class="delete-all">Add Task</div>
+        </div>
+    </form>
+    <div class="containerRight">
+        <h5 style="color: #f44336;" class="task title" *ngIf="sort=='' && ! allTask ">All Task's</h5>
+        <h5 class="task title" *ngIf="sort=='completed' && ! allTask ">Completed Task's</h5>
+        <h5 style="color: #c5c508;" class="task title" *ngIf="sort=='canceled' && ! allTask">Canceled Task's</h5>
+        <h5 style="color: #078ab6;" class="task title" *ngIf="sort=='pending' && ! allTask ">Pending Task's</h5>
+        <h5 style="color: #720404;" class="task title" *ngIf="allTask==''">Task List Empty</h5>
+        <button *ngIf="allTask.length > 0" (click)="deleteSelectedTasks()" type="button" class="btn btn-danger">Delete
+            Selected</button>
+        <div class="card" *ngFor="let task of allTask  | filter : sort : 'taskStatus' ; let indexnum=index ">
+            <div class="card-header">
+                <input class="m-2" type="checkbox" [(ngModel)]="task.selected">
+                <h5>Task {{indexnum + 1}}&nbsp;:&nbsp;{{task.title}} </h5>
+                <h6 *ngIf="task.taskStatus=='completed'" style="color: rgb(24, 175, 24);">Completed&nbsp; <i
+                        class="fa-sharp fa-solid fa-circle-check"> </i>
+                </h6>
+                <h6 *ngIf="task.taskStatus=='canceled'" style="color: rgb(218, 48, 5);">&nbsp; Canceled&nbsp; <i
+                        class="fa-solid fa-circle-xmark"></i>
+                </h6>
+                <h6 *ngIf="task.taskStatus=='pending'" style="color: rgb(175, 132, 5);">Pending..&nbsp;
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{task.task }}</p>
+                <div class="button" *ngIf="sort=='pending'">
+                    <button (click)="taskComplete(task.taskId)" type="submit"
+                        class="btn btn-outline-success btn-sm">Completed</button>
+                    <button (click)="taskCancel(task.taskId)" type="button"
+                        class="btn btn-outline-warning btn-sm">Cancel
+                    </button>
+                    <button (click)="deleteTask(task.taskId)" type="button"
+                        class="btn btn-outline-danger btn-sm">Delete</button>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="sort=='report'  ">
+            <div class="card-header">
+                <h5>Task Summary</h5>
+                <h6 style="color: #b0170c;">Deleted Task :{{deletedTask | async }}</h6>
+            </div>
+            <div class="d-flex">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body1">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                            </div>
+                            <span class="fw-semibold d-block mb-1">All Tasks</span>
+                            <h3 class="card-title mb-2">{{TotalTask | async }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body1">
+                            <div class="card-title d-flex align-items-center justify-content-between">
+                            </div>
+                            <span class="fw-semibold d-block mb-1">Completed </span>
+                            <h3 class="card-title mb-2">{{completedTask | async }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body1">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                            </div>
+                            <span class="fw-semibold d-block mb-1">Pending</span>
+                            <h3 class="card-title mb-2">{{pendingTask | async }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body1 align-items-center">
+                            <div class="card-title d-flex align-items-center justify-content-between">
+                            </div>
+                            <span class="fw-semibold d-block mb-1">Canceled</span>
+                            <h3 class="card-title mb-2">{{canceledTask | async }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
