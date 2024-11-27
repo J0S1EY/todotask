@@ -2,7 +2,7 @@ const express = require('express');
 const toDo = express();
 const router = express.Router();
 const dataservice = require("../controllers/toDoController");
-const jwt = require('jsonwebtoken');
+const {jwtMiddleware} = require('../security/jwt');
 
 // Middleware to parse JSON requests
 toDo.use(express.json());
@@ -39,23 +39,7 @@ toDo.post('/login', async (req, res) => {
     }
 });
 
-// **Middleware for JWT Validation**
-const jwtMiddleware = (req, res, next) => {
-    const token = req.headers['todojwt'];
 
-    if (!token) {
-        return res.status(401).json({ status: false, message: "Unauthorized: Token missing" });
-    }
-
-    try {
-        const decoded = jwt.verify(token, 'mytodo'); // Ensure the secret matches with token generation
-        req.user = decoded.jwtuser; // Attach user info to the request object
-        next();
-    } catch (error) {
-        console.error("JWT Verification Error:", error.message);
-        res.status(403).json({ status: false, message: "Unauthorized: Invalid or expired token" });
-    }
-};
 
 /**
  * @route POST /newtask
@@ -95,7 +79,7 @@ toDo.put('/task-status', jwtMiddleware, async (req, res) => {
     try {
         const user = req.user;
         const { objId, status } = req.body;
-        const result = await dataservice.taskStatus(user, objId, status);
+        const result = await dataservice.updateTaskStatus(user, objId, status);
         res.status(result.statusCode).json(result);
     } catch (error) {
         console.error("Update Task Status Error:", error.message);
@@ -136,7 +120,4 @@ toDo.delete('/task-multiple-delete', jwtMiddleware, async (req, res) => {
 });
 
 // **Exporting toDo Application**
-module.exports = toDo;
-
-
 module.exports = toDo;

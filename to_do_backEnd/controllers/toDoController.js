@@ -124,7 +124,7 @@ const getTaskList = async (username) => {
 };
 
 // Update Task Status
-const updateTaskStatus = async (username, password, taskId, newStatus) => {
+const updateTaskStatus = async (username, taskId, newStatus) => {
     try {
         const user = await Todotasks.findOne({ username });
         const task = user.taskList.find((t) => t.taskId === taskId);
@@ -152,7 +152,7 @@ const updateTaskStatus = async (username, password, taskId, newStatus) => {
 };
 
 // Delete Single Task
-const deleteTask = async (username, password, taskId) => {
+const deleteTask = async (username, taskId) => {
     try {
         const user = await Todotasks.findOne({ username });
         const taskIndex = user.taskList.findIndex((t) => t.taskId === taskId);
@@ -174,7 +174,7 @@ const deleteTask = async (username, password, taskId) => {
 };
 
 // Delete Multiple Tasks
-const deleteMultipleTasks = async (username, password, taskIds) => {
+const deleteMultipleTasks = async (username, taskIds) => {
     try {
         const user = await Todotasks.findOne({ username });
         let removedCount = 0;
